@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Build & Test Tracker</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i>
+                <h1>Tracker</h1>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-view="pipelines">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Pipelines</span>
+                </a>
+                <a href="#" class="nav-item" data-view="runs">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Runs</span>
+                </a>
+                <a href="#" class="nav-item" data-view="trends">
+                    <i class="fas fa-chart-area"></i>
+                    <span>Trends</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Apple Interview Demo</p>
+                <p class="version">v1.0.0</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="page-title">Dashboard</h2>
+                <div class="header-actions">
+                    <button class="btn btn-primary" id="createRunBtn">
+                        <i class="fas fa-plus"></i> New Run
+                    </button>
+                    <button class="btn btn-secondary" id="refreshBtn">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div id="dashboardView" class="view active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalPipelines">0</h3>
+                            <p>Total Pipelines</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="totalRuns">0</h3>
+                            <p>Total Runs</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-spinner"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="activeRuns">0</h3>
+                            <p>Active Runs</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3 id="avgScore">0%</h3>
+                            <p>Avg Score</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Recent Runs</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentRunsList"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Pipeline Overview</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="pipelinesList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pipelines View -->
+            <div id="pipelinesView" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Pipelines</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="allPipelinesList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Runs View -->
+            <div id="runsView" class="view">
+                <div class="filters">
+                    <select id="pipelineFilter" class="filter-select">
+                        <option value="">All Pipelines</option>
+                    </select>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="running">Running</option>
+                        <option value="completed">Completed</option>
+                        <option value="failed">Failed</option>
+                    </select>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Runs</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="allRunsList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trends View -->
+            <div id="trendsView" class="view">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Pipeline Trends</h3>
+                        <select id="trendPipelineSelect" class="filter-select">
+                            <option value="">Select Pipeline</option>
+                        </select>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Run Details -->
+    <div id="runModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Run Details</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="runModalBody">
+                <!-- Run details will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Creating Run -->
+    <div id="createRunModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Run</h3>
+                <button class="close-btn" onclick="closeCreateRunModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="createRunForm">
+                    <div class="form-group">
+                        <label for="pipelineSelect">Pipeline</label>
+                        <select id="pipelineSelect" required>
+                            <option value="">Select Pipeline</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="triggeredBy">Triggered By</label>
+                        <input type="text" id="triggeredBy" placeholder="e.g., Jenkins, Manual Test" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeCreateRunModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create Run</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
