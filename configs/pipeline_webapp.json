@@ -1,0 +1,44 @@
+{
+  "pipeline_name": "Web Application Pipeline",
+  "description": "Full-stack web application build and deployment",
+  "stages": [
+    {
+      "name": "Frontend Build",
+      "weight": 0.25,
+      "substages": [
+        {"name": "Install Dependencies", "weight": 0.3, "definition_of_done": "npm ci completes", "type": "auto"},
+        {"name": "Lint & Format", "weight": 0.2, "definition_of_done": "ESLint passes", "type": "auto"},
+        {"name": "Build Production", "weight": 0.5, "definition_of_done": "Vite build succeeds", "type": "auto"}
+      ]
+    },
+    {
+      "name": "Backend Build",
+      "weight": 0.25,
+      "substages": [
+        {"name": "Django Checks", "weight": 0.3, "definition_of_done": "manage.py check passes", "type": "auto"},
+        {"name": "Static Collection", "weight": 0.2, "definition_of_done": "Static files collected", "type": "auto"},
+        {"name": "Database Migrations", "weight": 0.5, "definition_of_done": "Migrations up to date", "type": "auto"}
+      ]
+    },
+    {
+      "name": "Testing",
+      "weight": 0.3,
+      "substages": [
+        {"name": "Frontend Unit Tests", "weight": 0.25, "definition_of_done": "Vitest passes", "type": "auto"},
+        {"name": "Backend Unit Tests", "weight": 0.25, "definition_of_done": "pytest passes", "type": "auto"},
+        {"name": "Integration Tests", "weight": 0.3, "definition_of_done": "API tests pass", "type": "auto"},
+        {"name": "Security Scan", "weight": 0.2, "definition_of_done": "No critical vulnerabilities", "type": "auto"}
+      ]
+    },
+    {
+      "name": "Deployment",
+      "weight": 0.2,
+      "substages": [
+        {"name": "Docker Build", "weight": 0.3, "definition_of_done": "Images built", "type": "auto"},
+        {"name": "Deploy to Staging", "weight": 0.3, "definition_of_done": "Staging deployment successful", "type": "auto"},
+        {"name": "Smoke Tests", "weight": 0.2, "definition_of_done": "Staging health checks pass", "type": "auto"},
+        {"name": "Production Deploy", "weight": 0.2, "definition_of_done": "Prod deployment approved", "type": "manual"}
+      ]
+    }
+  ]
+}

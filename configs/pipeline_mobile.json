@@ -1,0 +1,33 @@
+{
+  "pipeline_name": "Mobile App CI/CD Pipeline",
+  "description": "Build → Test → Deploy lifecycle for mobile applications",
+  "stages": [
+    {
+      "name": "Build",
+      "weight": 0.3,
+      "substages": [
+        {"name": "Dependency Installation", "weight": 0.3, "definition_of_done": "npm install completes", "type": "auto"},
+        {"name": "TypeScript Compilation", "weight": 0.4, "definition_of_done": "tsc builds without errors", "type": "auto"},
+        {"name": "Bundle Generation", "weight": 0.3, "definition_of_done": "React Native bundle created", "type": "auto"}
+      ]
+    },
+    {
+      "name": "Test",
+      "weight": 0.4,
+      "substages": [
+        {"name": "Unit Tests", "weight": 0.3, "definition_of_done": "Jest tests pass", "type": "auto"},
+        {"name": "E2E Tests", "weight": 0.4, "definition_of_done": "Detox tests pass", "type": "auto"},
+        {"name": "Manual QA", "weight": 0.3, "definition_of_done": "QA team approval", "type": "manual"}
+      ]
+    },
+    {
+      "name": "Deploy",
+      "weight": 0.3,
+      "substages": [
+        {"name": "TestFlight Upload", "weight": 0.4, "definition_of_done": "iOS build uploaded", "type": "auto"},
+        {"name": "Play Store Upload", "weight": 0.4, "definition_of_done": "Android build uploaded", "type": "auto"},
+        {"name": "Release Notes", "weight": 0.2, "definition_of_done": "Release notes published", "type": "manual"}
+      ]
+    }
+  ]
+}
